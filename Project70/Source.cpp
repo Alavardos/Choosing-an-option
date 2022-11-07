@@ -1,52 +1,42 @@
 #include<iostream>
 #include<string>
 #include<cstdlib>
+#include <fstream>
+#include <unordered_map>
 #include<Windows.h>
 #pragma warning(disable : 4996)
-unsigned int hashq(const char* word)
-{
-	unsigned int hash = 0;
-	for (int i = 0; word[i] != '\0'; i++)
-	{
-		hash = 31 * hash + word[i];
-	}
-	return hash;
-}
-
 int main(void)
 {
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
 	setlocale(LC_ALL, "RUS");
 	std::string a;
-	while (true)
+	std::cout << "Чтобы выйти из программы нажмите 1:"<<std::endl;
+	bool t = true;
+	std::hash<std::string>hasher;
+	std::ofstream wri("variant.txt");
+	while (t!=false)
 	{
 		std::cout << "Введите ФИО Студента:";
-		std::cin >> a;
-		char y[20];
-		const char* g = a.c_str();
-		int b;
-		b = hashq(g);
-		_itoa(b, y, 16);
-		std::cout << "Вариант для студента: " << a << std::endl;
-		for (int i = 0; i < 2; i++)
+		std::getline(std::cin, a);
+		if (a=="1")
 		{
-			switch (i)
-			{
-			case 0:
-			{ std::cout << "Первый вариант = ";
-			break; }
-			case 1:
-			{
-				std::cout << "Второй варинт = ";
-				break;
-			}
-			default:
-				break;
-			}
-			std::cout << y[i] << std::endl;
+			t = false;
+		}
+		else {
+			char y[100];
+			size_t hash = hasher(a);
+			int b = static_cast<int>(hash);
+			_itoa(b, y, 16);
+			wri << a << ":";
+			std::cout << "Вариант 1 = ";
+			std::cout << y[0] << std::endl;
+			wri << y[0] << " ";
+		    wri << std::endl;
+			//for (int i = 0; i < 1; i++){switch (i){case 0:{ std::cout << "Вариант 1 = ";break; }default:break;}std::cout << y[i] << std::endl;wri << y[i]<<" ";}wri << std::endl;
 		}
 	}
+	wri.close();
 	system("chcp 1251");
 	system("cls");
 }
